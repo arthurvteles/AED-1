@@ -1,0 +1,113 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+
+int menu(int escolha) ;
+char* lista(char *lista_nomes,int *count);
+char* exclui (char *str , int *count);
+
+int main(){
+    char *lista_nomes ;
+    int escolha,count=0;
+
+    lista_nomes = (char*) malloc(sizeof(char));
+        do {
+            escolha = menu(escolha);
+
+        switch(escolha){
+            case 1 :
+                 lista_nomes = lista(lista_nomes,&count);
+                 break;
+
+            case 2:
+                lista_nomes = exclui(lista_nomes,&count);
+                break ;
+
+            case 3 :
+                puts(lista_nomes);
+                break;
+            default :
+                break ;
+        }
+
+}while (escolha != 4);
+
+free(lista_nomes);
+return 0;
+}
+
+
+int menu (int escolha){
+
+        printf("\nEscolha uma das opcoes:");
+        printf("\n1-Adicionar nome");
+        printf("\n2-Remover nome");
+        printf("\n3-Listar nomes");
+        printf("\n4-sair:");
+        scanf("%d",&escolha);
+
+return escolha;
+}
+
+char* lista(char *lista_nomes,int *count){
+char nome[50],aux;
+int tamanho=0,i=0,k=0 ;
+
+
+    printf("Digite o nome desejado : ");
+
+    setbuf(stdin,NULL);
+    fgets(nome,50,stdin);
+    tamanho = strlen(nome);
+    nome[strlen(nome)] = '\0';
+    nome[strlen (nome)-1] = ' ';
+
+    nome= (char*) malloc (sizeof(nome)*tamanho) ;
+    *count = *count + tamanho;
+
+
+    lista_nomes =(char*) realloc (lista_nomes,(tamanho+1)*sizeof(char));
+
+
+    strcat(lista_nomes,nome);
+    free(nome) ;
+    return lista_nomes;
+
+}
+
+char* exclui (char *lista_nomes , int *count)
+{
+
+
+
+char nome[50],*aux;
+int tamanho=0,i=0;
+
+
+
+    printf("Digite o nome desejado : ");
+
+    setbuf(stdin,NULL);
+    fgets(nome,50,stdin);
+    nome[strlen(nome)-1] = ' ';
+    nome[strlen(nome)] = '\0';
+
+    tamanho = strlen(nome);
+
+
+    if (tamanho > 0) {
+        aux = lista_nomes ;
+        while ((aux = strstr(lista_nomes, nome)) != NULL) {
+            memmove(aux, aux + tamanho, strlen(aux + tamanho) + 1);
+        }
+       *count = *count - tamanho ;
+       lista_nomes =  realloc(lista_nomes,*count * sizeof(char)) ;
+       return lista_nomes;
+
+    }
+    else {
+      return lista_nomes;
+    }
+
+}
