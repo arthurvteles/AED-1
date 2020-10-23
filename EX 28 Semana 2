@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+typedef struct {
+char nome[30];
+int idade;
+float altura;
+}PESSOA;
+
+void menu();
+
+
+int main(){
+    PESSOA *pessoa;
+    int x=0,aux_2=0,i=0;
+    size_t tamanho;
+
+
+        do{
+            menu() ;
+            scanf("%d",&x);
+              if(x==1){
+
+                if(aux_2==0){
+                        pessoa=(PESSOA*) malloc(sizeof(PESSOA));
+                        if(!pessoa)
+                        {
+                            printf("MEMORIA INSUFICIENTE");
+                        }
+                    printf("\nDigite o nome da pessoa %d:",i);
+                    setbuf(stdin,NULL);
+                    fgets(pessoa[0].nome,30,stdin);
+
+
+                    printf("\nDigite a idade da pessoa %d:",i);
+                        scanf("%d",&pessoa[0].idade);
+
+                    printf("\nDigite a altura da pessoa %d:",i);
+                        scanf("%f",&pessoa[0].altura);
+
+                    system("cls");
+                    aux_2 ++ ;
+                    i++;
+           }else{
+                    pessoa = (PESSOA*) realloc(pessoa ,sizeof(PESSOA)*(i+1)) ;
+                     if(!pessoa)
+                        {
+                            printf("MEMORIA INSUFICIENTE");
+                        }
+
+                    printf("\nDigite o nome da pessoa %d:",i);
+                        setbuf(stdin,NULL);
+                        fgets(pessoa[i].nome,30,stdin);
+
+
+                    printf("\nDigite a idade da pessoa %d:",i);
+                        scanf("%d",&pessoa[i].idade);
+
+                    printf("\nDigite a altura da pessoa %d:",i);
+                         scanf("%f",&pessoa[i].altura);
+
+                    system("cls");
+                    i++;
+            }
+              }
+        }while(x!=2);
+
+
+          for(int j=0; j<i ;j++){
+
+                    printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
+                    printf("\n");
+                    printf("Nome da pessoa %d eh:%s",j,pessoa[j].nome);
+                    printf("Idade da pessoa %d eh:%d\n",j,pessoa[j].idade);
+                    printf("Altura da pessoa %d eh: %.2f\n",j, pessoa[j].altura);
+                    printf("\n");
+          }
+free(pessoa);
+
+
+return 0;
+}
+
+
+void menu(){
+    printf("1-Adicionar pessoa \n");
+    printf("2-Sair\n");
+}
+
