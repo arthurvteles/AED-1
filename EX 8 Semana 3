@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+void imprime_vetor(char *vetor,int j);
+
+
+int main(){
+   int escolha,j=0,tamanho=80 ;
+   char *string,aux;
+
+    string = (char*) malloc(80);
+        do{
+            printf("\nSe desejas acrescentar um nome digite 1 ,senao 2:");;
+                scanf("%d",&escolha);
+           setbuf(stdin,NULL);
+           if(escolha == 1){
+           do{
+                aux=getchar();
+                string[j] = aux ;
+                j++;
+           }while(aux != '\n');
+
+            string[j]= '\0';
+            printf("\nO tamanho disponivel eh:%d",tamanho-j);
+           }
+
+        }while(escolha != 2);
+
+        string = (char*) realloc(string , sizeof(char)*j) ;
+        imprime_vetor(string,j);
+
+free(string);
+return 0;
+}
+
+
+void imprime_vetor(char *vetor,int j){
+        fputs(vetor , stdout);
+}
