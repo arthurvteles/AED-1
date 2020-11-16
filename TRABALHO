@@ -1,0 +1,283 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+//STRUCT COM OS CONTEUDOS DA AGENDA //
+typedef struct pessoa {
+    char nome[50] ;
+    int idade ;
+    char profissao[50] ;
+}PESSOA;
+
+//STRUCT PARA OS NOS //
+typedef struct node {
+    PESSOA pessoa ;
+    struct node *next;
+    struct node *before;
+}NODE ;
+
+//STRUCT LISTA //
+typedef struct list{
+    NODE *head ;
+    int tamanho ;
+    int escolha ;
+    PESSOA pessoa ;
+    int i;
+    int j;
+}LIST ;
+
+//DECLARACAO DE FUNCOES //
+LIST* nova_lista();
+void menu() ;
+void imprime_lista(LIST *lista);
+void push (LIST *list , PESSOA people);
+void ordem_alfabetica(LIST *list) ;
+void ordem_crescente (LIST *list);
+void ordem_decrescente (LIST *list);
+void esvazia_lista(LIST *list);
+
+
+
+int main(){
+    LIST *list = nova_lista() ;
+    void *pbuffer = (LIST*) malloc (sizeof(LIST)) ;
+        if(pbuffer == NULL){
+            printf("ERROR :MEMORIA INSUFICIENTE") ;
+            exit(1);
+        }
+
+        pbuffer = list ;
+
+
+        do{
+        menu();
+        scanf("%d",&list->escolha) ;
+
+            switch(list->escolha){
+
+                //ADICIONA UM NO A LISTA //
+                case 1:
+                     //LE OS DADOS PARA PASSAR PARA O PUSH//
+                     printf("\nNOME:") ;
+                        setbuf(stdin,NULL) ;
+                        scanf("%s",list->pessoa.nome);
+                     printf("IDADE:");
+                        scanf("%d",&list->pessoa.idade);
+                     printf("PROFISSAO:") ;
+                        setbuf(stdin,NULL) ;
+                        scanf("%s",list->pessoa.profissao);
+
+                    push(list,list->pessoa);
+                    break;
+
+                //IMRPIME A LISTA DE ACORDO COM A ORDEM DE ADICAO //
+                case 2:
+                     imprime_lista(list) ;
+                     break;
+
+                //IMRPIME A LISTA EM ORDEM ALFABETICA//
+                case 3:
+                    ordem_alfabetica(list);
+                    imprime_lista(list);
+                    break;
+
+                //IMPRIME A LISTA DE ACORDO COM A IDADE (CRESCENTE)//
+                case 4 :
+                    ordem_crescente(list);
+                    imprime_lista(list) ;
+                    break;
+
+                //IMPRIME A LISTA DE ACORDO COM A IDADE (DECRESCENTE)//
+                case 5:
+                    ordem_decrescente(list);
+                    imprime_lista(list);
+                break ;
+
+                }
+    }while(list->escolha != 6);
+        esvazia_lista(list);
+        free(pbuffer);
+
+return 0;
+}//FIM DA MAIN //
+
+//MENU//
+void menu(){
+    printf("\n");
+    printf("********MENU********");
+    printf("\n1-Adicionar cadastro");
+    printf("\n2-Iprimir lista") ;
+    printf("\n3-Ordenar por ordem alfabetica");
+    printf("\n4-Ordenar por idade (ordem crescente)");
+    printf("\n5-Ordenar por idade (ordem decrescente)");
+    printf("\n6-Sair\n:") ;
+} //FIM menu//
+
+//CRIA A NOVA LISTA//
+LIST* nova_lista(){
+    LIST *new_list ;
+
+        new_list = (LIST*) malloc (sizeof (LIST)) ;
+        if(new_list == NULL) {
+            printf("\nERROR :MEMORIA INSUFICIENTE") ;
+            return 0;
+        }
+
+        new_list->tamanho = 0;
+        new_list->head = NULL ;
+
+        return new_list ;
+} //FIM nova_lista//
+
+//ADICION A NOME NA LISTA//
+void push(LIST *list , PESSOA people){
+
+    NODE* no= (NODE*) malloc (sizeof(NODE));
+        if(no == NULL){
+           printf("ERROR:MEMORIA INSUFICIENTE");
+            exit(1);
+        }
+
+    no->pessoa = people ;
+    no->next = list->head ;
+    no->before = NULL;
+
+    if(list->head != NULL){
+        list->head->before = no ;
+    }
+        list->head = no;
+
+
+}//FIM push//
+
+//IMPRIME A LISTA//
+void imprime_lista(LIST *lista){
+    NODE *no  =  (NODE*)malloc (sizeof(NODE)) ;
+     no =  lista->head ;
+
+        while (no != NULL){
+            printf("\n");
+            printf("*-*-*-*-*-*-*-*-*-*") ;
+            printf("\nNome:%s\n",no->pessoa.nome);
+            printf("Idade:%d", no->pessoa.idade);
+            printf("\nProfissao:%s",no->pessoa.profissao);
+            printf("\n*-*-*-*-*-*-*-*-*-*") ;
+            printf("\n");
+            no = no->next ;
+        }
+
+free(no);
+} //FIM //
+
+
+
+//ORDENA POR ORDEM ALFABETICA//
+void ordem_alfabetica(LIST *list){
+
+    NODE *no = (NODE*) malloc(sizeof(NODE)) ;
+         if(no == NULL){
+            printf("ERROR:MEMORIA INSUFICIENTE");
+
+        }
+     NODE *temp = (NODE*) malloc(sizeof(NODE)) ;
+         if(temp == NULL){
+            printf("ERROR:MEMORIA INSUFICIENTE");
+        }
+
+    PESSOA *person;
+        for (temp = list->head ; temp->next != NULL ; temp = temp->next){
+            for (no =temp->next ; no !=NULL; no= no->next){
+
+                if(strcmp(temp->pessoa.nome,no->pessoa.nome)>0) {
+                    *person= temp->pessoa;
+                    temp->pessoa = no->pessoa ;
+                    no->pessoa = *person ;
+
+                }
+
+            }
+        }
+
+ free(no);
+}//FIM ordem_alfabetica//
+
+
+//ORDENA PELA IDADE POR ORDEM CRESCENTE
+void ordem_crescente(LIST *list) {
+    NODE *no = (NODE*) malloc(sizeof(NODE)) ;
+         if(no == NULL){
+            printf("ERROR:MEMORIA INSUFICIENTE");
+
+        }
+     NODE *temp = (NODE*) malloc(sizeof(NODE)) ;
+        if(temp == NULL){
+            printf("ERROR:MEMORIA INSUFICIENTE");
+
+        }
+
+        PESSOA *person = (PESSOA*) malloc(sizeof(PESSOA));
+
+        for (temp= list->head ; temp->next != NULL ; temp = temp->next){
+            for (no =temp->next ; no !=NULL; no= no->next){
+
+                if(temp->pessoa.idade > no->pessoa.idade) {
+
+                    *person= temp->pessoa;
+                    temp->pessoa = no->pessoa ;
+                    no->pessoa = *person ;
+                }
+
+        }
+    }
+
+    free(no);
+} //FIM DA ordem_crescente //
+
+//ORDENA POR ORDEM DECRESCENTE//
+void ordem_decrescente(LIST *list){
+
+    NODE *no ,*temp ;
+    PESSOA *person;
+     no= (NODE*) malloc(sizeof(NODE)) ;
+         if(no == NULL){
+            printf("ERROR:MEMORIA INSUFICIENTE");
+            exit(1);
+        }
+
+      temp = (NODE*) malloc(sizeof(NODE)) ;
+         if(temp == NULL){
+            printf("ERROR:MEMORIA INSUFICIENTE");
+            exit(1);
+        }
+
+        for (temp = list->head ; temp->next != NULL ; temp = temp->next){
+            for (no =temp->next ; no !=NULL; no= no->next){
+                if(temp->pessoa.idade < no->pessoa.idade) {
+                    *person= temp->pessoa;
+                    temp->pessoa = no->pessoa ;
+                    no->pessoa = *person ;
+
+                }
+
+            }
+        }
+ free(no);
+}//FIM ordem_decrescente//
+
+
+//ESVAZIA A LISTA//
+void esvazia_lista(LIST *list){
+
+    NODE *no ,*aux ;
+        no = list->head ;
+
+
+
+            while(no != NULL){
+                aux = no;
+                no = no->next;
+                free(aux) ;
+            }
+    free(no);
+}
